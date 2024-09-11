@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box justify-content-between d-flex align-items-md-center flex-md-row flex-column">
+                    <h4 class="page-title">Profile</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        <div class="card card-body">
+            <div class="tab-pane" id="settings" role="tabpanel">
+                <form method="post"
+                      action="{% if not 'edit-profile' in request.url %}/profile{% else %}/edit-profile/{{ user.id }}{% endif %}">
+                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="ri-contacts-book-2-line me-1"></i>
+                        Personal Info</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="firstname" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName"
+                                       placeholder="Enter full name"
+                                       name="fullName"
+                                       value="{{ user.full_name }}"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="example-select" class="form-label">Methods of Payment</label>
+                                <select class="form-select" name="paymentMethod" id="example-select">
+                                    <option>Starbucks Gift Card</option>
+                                    <option>E-Transfer</option>
+                                    <option>Tim Horton's Gift Card</option>
+                                    <option>Amazon Gift Card</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="useremail" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="useremail"
+                                       placeholder="Enter email"
+                                       value="{{ user.email }}"
+                                       disabled
+                                >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="userpassword" class="form-label">New Password</label>
+                                <input type="password" name="password" class="form-control" id="userpassword"
+                                       placeholder="Enter new password">
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+
+                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="ri-building-line me-1"></i>
+                        Company Info</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="companyname" class="form-label">Pharmacy Name</label>
+                                <input type="text" class="form-control" id="companyname"
+                                       placeholder="Enter pharmacy name"
+                                       name="pharmacy"
+                                       value="{{ user.pharmacy }}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cwebsite" class="form-label">Pharmacy Phone Number</label>
+                                <input type="text" class="form-control" id="cwebsite"
+                                       type="tel"
+                                       name="phone"
+                                       placeholder="Enter pharmacy phone number"
+                                       value="{{ user.phone }}"
+                                >
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                    {% if 'edit-profile' in request.url %}
+                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="ri-building-line me-1"></i>
+                            User Info</h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="companyname" class="form-label">Accumulated Amount</label>
+                                    <input type="text" class="form-control" id="accamt"
+                                           placeholder="Enter accumulated amount"
+                                           name="accamt"
+                                           value="{{ user.accumulated_amount }}"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="companyname" class="form-label">Products Cashed Out</label>
+                                    <input type="number" class="form-control" id="pcout"
+                                           placeholder="Enter products cashed out"
+                                           name="pcout"
+                                           value="{{ user.products_cashed_out }}"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="cwebsite" class="form-label">Counselling Fees</label>
+                                    <input type="text" class="form-control" id="cfee"
+                                           name="cfee"
+                                           placeholder="Enter counselling fee"
+                                           value="{{ user.counselling_fee }}"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="cwebsite" class="form-label">Products Not Cashed Out</label>
+                                    <input type="number" class="form-control" id="pcnout"
+                                           name="pcnout"
+                                           placeholder="Enter products not cashed out"
+                                           value="{{ user.products_not_cashed_out }}"
+                                    >
+                                </div>
+                            </div>
+                        </div> <!-- end row -->
+                    {% endif %}
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-outline-success rounded-pill mt-2"><i
+                                class="ri-save-line"></i>
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- end settings content-->
+        </div>
+
+    </div>
+{% endblock content %}
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var paymentMethod = {{ user.payment_method | tojson | safe}};
+            var selectElement = document.getElementById('example-select');
+            for (let i = 0; i < selectElement.options.length; i++) {
+                console.log(selectElement.options[i].innerHTML, paymentMethod)
+                if (selectElement.options[i].innerHTML === paymentMethod) {
+                    selectElement.selectedIndex = i;
+                    break;
+                }
+            }
+        });
+    </script>
+{% endblock script %}

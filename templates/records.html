@@ -1,0 +1,71 @@
+{% if records and records|length > 0 %}
+    <div class="col-lg-12" id="counsellingHistory">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <h4 class="header-title">Counselling History</h4>
+                        <p class="text-muted fs-14">
+                            This table displays {% if 'admin' in request.url %}
+                            <b>{{ user_for_history.full_name }}'s</b> {% endif %}counselling histories.
+                        </p>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="text-end">
+                            <form action="/cash_out" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success rounded-5"
+                                        {% if not_cashed_out_count == 0 or 'admin' in request.url %}
+                                        disabled
+                                        {% endif %}
+                                        id="cashOutButton"
+                                >
+                                    <i class="ri-money-pound-circle-line me-1"></i> Cash Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered table-centered mb-0">
+                        <thead>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Product</th>
+                            <th>Fee</th>
+                            <th>Counselling Indication</th>
+                            <th>Cashed Out</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in records %}
+                            <tr>
+                                <td> {{ loop.index }}</td>
+                                <td class="table-user">
+                                    {{ record.product.name }}
+                                </td>
+                                <td>${{ record.product.price }}</td>
+                                <td>{{ record.counselling_indication }}</td>
+                                <td>{% if record.cashed_out %} Yes {% else %} No {% endif %}</td>
+                                <td class="text-center">
+                                    <form action="/delete-counselling-history/{{ record.id }}" method="POST"
+                                          style="display:inline;">
+                                        <button
+                                                type="submit"
+                                                class="btn btn-outline-danger rounded-pill"
+                                                {% if 'admin' in request.url %}disabled{% endif %}
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div>
+{% endif %}

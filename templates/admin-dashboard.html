@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+{% block head %}
+{% endblock head %}
+{% block style %}
+    <link href="{{ url_for('static', filename='assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css') }}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/vendor/datatables.net-fixedcolumns-bs5/css/fixedColumns.bootstrap5.min.css') }}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/vendor/datatables.net-fixedheader-bs5/css/fixedHeader.bootstrap5.min.css') }}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/vendor/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css') }}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/vendor/datatables.net-select-bs5/css/select.bootstrap5.min.css') }}"
+          rel="stylesheet"
+          type="text/css"/>
+    <style>
+        td {
+            vertical-align: middle; /* Aligns content vertically in the middle */
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <div class="page-title-box justify-content-between d-flex align-items-lg-center flex-lg-row flex-column">
+        <h4 class="page-title">Admin Dashboard</h4>
+    </div>
+    {% include 'dashboard-insights.html' %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Users</h4>
+                    <p class="text-muted fs-14">
+                        This table list all the users.
+                    </p>
+
+                    <div id="basic-datatable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="basic-datatable"
+                                       class="table table-striped dt-responsive nowrap w-100 dataTable no-footer dtr-inline"
+                                       aria-describedby="basic-datatable_info">
+                                    <thead>
+                                    <tr>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="basic-datatable"
+                                            rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Sr: activate to sort column descending">Sr
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1" aria-label="Full Name: activate to sort column ascending">User
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1" aria-label="Phone: activate to sort column ascending">Phone
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1" aria-label="Pharmacy: activate to sort column ascending">
+                                            Pharmacy
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1" aria-label="Email: activate to sort column ascending">Email
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Accumulated Amount: activate to sort column ascending">
+                                            Accumulated Amount
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Products Cashed Out: activate to sort column ascending">Products
+                                            Cashed Out
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Products Cashed Out: activate to sort column ascending">
+                                            Counselling Fees
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Products Cashed Out: activate to sort column ascending">
+                                            Products to Cash Out
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Products Cashed Out: activate to sort column ascending">
+                                            Payment Method
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatable" rowspan="1"
+                                            colspan="1" aria-label="Admin: activate to sort column ascending">
+                                            Quick Actions
+                                        </th>
+                                    </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+                                    {% for user in users %}
+                                        <tr class="{% if loop.index % 2 == 0 %}even{% else %}odd{% endif %}">
+                                            <td class="dtr-control sorting_1">{{ loop.index }}</td>
+                                            <td>{{ user.full_name }}</td>
+                                            <td>{{ user.phone }}</td>
+                                            <td>{{ user.pharmacy }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>$ {{ user.accumulated_amount }}</td>
+                                            <td>{{ user.products_cashed_out }}</td>
+                                            <td>$ {{ user.counselling_fee }}</td>
+                                            <td>{{ user.products_not_cashed_out }}</td>
+                                            <td>{{ user.payment_method }}</td>
+                                            <td>
+                                                <a href="/admin?viewHistories={{ user.id }}"
+                                                   class="btn btn-outline-info rounded-pill">View Histories</a>
+                                                <a href="/edit-profile/{{ user.id }}"
+                                                   class="btn btn-outline-warning rounded-pill">Edit User</a>
+                                                <a href="/delete/{{ user.id }}"
+                                                   class="btn btn-outline-danger rounded-pill">Delete User</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+    {% include 'records.html' %}
+
+{% endblock content %}
+{% block script %}
+    <!-- Load jQuery first -->
+    <script src="{{ url_for('static', filename='assets/vendor/jquery/jquery.min.js') }}"></script>
+
+    <!-- Load DataTables and other dependent scripts -->
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-fixedcolumns-bs5/js/fixedColumns.bootstrap5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendor/datatables.net-select/js/dataTables.select.min.js') }}"></script>
+
+    <!-- Your custom script that initializes DataTables -->
+    <script src="{{ url_for('static', filename='assets/js/pages/demo.datatable-init.js') }}"></script>
+    <script>
+        // Get the ID of the div to scroll to from Flask
+        const scrollToId = "{{ scroll_to_id }}";
+
+        // Function to scroll to the specific div
+        function scrollToElement(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Scroll to the div if an ID is provided
+        if (scrollToId) {
+            window.onload = () => scrollToElement(scrollToId);
+        }
+    </script>
+{% endblock script %}

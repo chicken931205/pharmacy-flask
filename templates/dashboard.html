@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+    <div class="page-title-box justify-content-between d-flex align-items-lg-center flex-lg-row flex-column">
+        <h4 class="page-title">Dashboard</h4>
+    </div>
+    {% include 'dashboard-insights.html' %}
+    {% if products|length > 0 %}
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="d-flex card-header justify-content-between align-items-center">
+                    <h4 class="header-title">Products</h4>
+                </div>
+                {% include 'products.html' %}
+            </div>
+        </div>
+    {% endif %}
+    {% include 'records.html' %}
+    <audio id="cash-sound" src="{{ url_for('static', filename='cashout.mp3') }}"></audio>
+{% endblock content %}
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cashOutButton = document.getElementById('cashOutButton');
+            cashOutButton.addEventListener('click', function () {
+                const cashSound = document.getElementById('cash-sound');
+                cashSound.play();
+            });
+        });
+    </script>
+{% endblock script %}
